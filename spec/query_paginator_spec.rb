@@ -1,42 +1,54 @@
 require 'spec_helper'
 
-describe Pagelux::Query do
-  let(:paginator) { Pagelux::Query.new(page, limit) }
+describe Pagelux::QueryPaginator do
+  let(:query) { Query.new(('a'..'m').to_a) }
+  let(:paginator) { Pagelux::QueryPaginator.new(query) }
+  # let(:results) { paginator.paginate(params) }
 
   describe 'normalizing pagination values' do
+    let(:params) { {} }
+
     context 'when nothing is passed in' do
-      let(:paginator) { Pagelux::Query.new  }
-
       it 'uses defaults' do
-        paginator.page.should == 1
-        paginator.limit.should == 100
-      end
-    end
+        paginator.paginate(params)
 
-    context 'when nils are passed in (a real case with params)' do
-      let(:page) { nil }
-      let(:limit) { nil }
-
-      it 'uses defaults' do
         paginator.page.should == 1
         paginator.limit.should == 100
       end
     end
 
     context 'when page is less than 1' do
-      let(:page) { 0 }
-      let(:limit) { 100 }
+      let(:params) { 
+        {
+          page: 0
+        }
+      }
 
       it "uses first page" do
+        paginator.paginate(params)
+
         paginator.page.should == 1
+      end
+    end
+
+    context 'when the page is greater than what is available' do
+      let(:params) {
+        {
+          page: 4,
+          limit: 5
+        }
+      }
+
+      it 'gets the last page' do
+        paginator.paginate(params)
+
+        paginator.page.should == 3
       end
     end
   end
 
   describe 'query pagination' do
-    let(:limit) { 5 }
-    let(:sample_query) { Query.new(('a'..'m').to_a) }
-    let(:results) { paginator.perform(sample_query) }
+    let(:results) { paginator.paginate({page: page, limit: 5}) }
 
     context 'when on first page' do
       let(:page) { 1 }

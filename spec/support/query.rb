@@ -9,4 +9,8 @@ class Query < Struct.new(:items, :index)
   def limit(num)
     items.slice(index, num)
   end
+
+  def count
+    items.length
+  end
 end
