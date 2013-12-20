@@ -6,8 +6,8 @@ require 'pagelux/version'
 Gem::Specification.new do |spec|
   spec.name          = "pagelux"
   spec.version       = Pagelux::VERSION
-  spec.authors       = ["Rae Bonfanti & Ryan Buckley"]
-  spec.email         = ["rae.bonfanti+ryan.buckley@socialchorus.com"]
+  spec.authors       = ["Rae Bonfanti", "Ryan Buckley", "Kane Baccigalupi", "Sowjanya Mudunuri"]
+  spec.email         = ["developers@socialchorus.com"]
   spec.description   = %q{Basic pagination for ActiveRecord::Relation objects}
   spec.summary       = %q{Usage: Pagelux::Query.new(page, limit).perform(the_ar_query)}
   spec.homepage      = ""
