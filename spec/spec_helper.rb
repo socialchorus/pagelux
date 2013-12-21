@@ -1,3 +1,7 @@
+require 'active_record'
+require 'pg'
+
+require_relative './support/db_connection'
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
 $: << File.dirname(__FILE__) + "/../lib"
@@ -19,4 +23,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.before do
+    Query.delete_all
+  end
 end

@@ -38,8 +38,8 @@ module Pagelux
 
       def normalize_page(n)
         n = (n  || self.class.default_page).to_i
-        n = self.class.default_page if n < self.class.default_page
         n = n > last_page ? last_page : n
+        n = self.class.default_page if n < self.class.default_page
         n
       end
 

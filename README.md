@@ -22,6 +22,15 @@ Or install it yourself as:
 
 ## Contributing
 
+Test database can be created with this:
+    createdb pagelux_test
+
+In pgsql you will need to setup the table:
+
+    psql -d pagelux_test
+
+    CREATE TABLE queries (n int);
+
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)

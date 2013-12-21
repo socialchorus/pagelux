@@ -1,7 +1,13 @@
 require 'spec_helper'
 
 describe Pagelux::QueryPaginator do
-  let(:query) { Query.new(('a'..'m').to_a) }
+  let(:query) { 
+    (1..13).to_a.each do |n|
+      Query.create!(n: n)
+    end
+
+    Query.all
+  }
   let(:paginator) { Pagelux::QueryPaginator.new(query) }
   # let(:results) { paginator.paginate(params) }
 
@@ -45,23 +51,39 @@ describe Pagelux::QueryPaginator do
         paginator.page.should == 3
       end
     end
+
+    context "when the query count is 0" do
+      let(:query) { Query.all }
+
+      let(:params) {
+        {
+          page: nil,
+          limit: 200
+        }
+      }
+
+      it "uses the first page" do
+        paginator.paginate(params)
+        paginator.page.should == 1
+      end
+    end
   end
 
   describe 'query pagination' do
-    let(:results) { paginator.paginate({page: page, limit: 5}) }
+    let(:results) { paginator.paginate({page: page, limit: 5}).map(&:n) }
 
     context 'when on first page' do
       let(:page) { 1 }
 
       it "will return the right records" do
-        results.should == ('a'..'e').to_a
+        results.should == (1..5).to_a
       end
     end
 
     context 'when on middle page' do
       let(:page) { 2 }
       it "will return the right records for a middle page" do
-        results.should == ('f'..'j').to_a
+        results.should == (6..10).to_a
       end
     end
 
@@ -69,7 +91,7 @@ describe Pagelux::QueryPaginator do
       let(:page) { 3 }
 
       it "will return the right records no the last page" do
-        results.should == ('k'..'m').to_a
+        results.should == (11..13).to_a
       end
     end
   end

@@ -35,21 +35,27 @@ describe Pagelux::Query do
 
   describe 'query pagination' do
     let(:limit) { 5 }
-    let(:sample_query) { Query.new(('a'..'m').to_a) }
-    let(:results) { paginator.perform(sample_query) }
+    let(:sample_query) { 
+      (1..13).to_a.each do |n|
+        Query.create!(n: n)
+      end
+      Query.all
+    }
+
+    let(:results) { paginator.perform(sample_query).map(&:n) }
 
     context 'when on first page' do
       let(:page) { 1 }
 
       it "will return the right records" do
-        results.should == ('a'..'e').to_a
+        results.should == (1..5).to_a
       end
     end
 
     context 'when on middle page' do
       let(:page) { 2 }
       it "will return the right records for a middle page" do
-        results.should == ('f'..'j').to_a
+        results.should == (6..10).to_a
       end
     end
 
@@ -57,7 +63,7 @@ describe Pagelux::Query do
       let(:page) { 3 }
 
       it "will return the right records no the last page" do
-        results.should == ('k'..'m').to_a
+        results.should == (11..13).to_a
       end
     end
   end
