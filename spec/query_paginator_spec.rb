@@ -9,7 +9,6 @@ describe Pagelux::QueryPaginator do
     Query.all
   }
   let(:paginator) { Pagelux::QueryPaginator.new(query) }
-  # let(:results) { paginator.paginate(params) }
 
   describe 'normalizing pagination values' do
     let(:params) { {} }
@@ -93,6 +92,24 @@ describe Pagelux::QueryPaginator do
       it "will return the right records no the last page" do
         results.should == (11..13).to_a
       end
+    end
+  end
+
+  context 'when query count results in grouped set' do
+    let(:page) { 1 }
+
+    let(:query) { 
+      (1..13).to_a.each do |n|
+        Query.create!(n: n)
+      end
+
+      Query.all.select('n').group(:n)
+    }
+
+    let(:results) { paginator.paginate({page: page, limit: 5}).map(&:n) }
+
+    it "still return the right number (and does not blow up)" do
+      results.size.should == 5
     end
   end
 end

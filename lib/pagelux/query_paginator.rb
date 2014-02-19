@@ -9,8 +9,18 @@ module Pagelux
     end
 
     def paginate(params)
-      @pagination_data = PaginationData.new(params[:page], params[:limit], base_query.count)
+      @pagination_data = PaginationData.new(
+        params[:page], params[:limit], total
+      )
       limit_query
+    end
+
+    def total
+      query_total.is_a?(Hash) ? base_query.to_a.size : query_total
+    end
+
+    def query_total
+      @query_total ||= base_query.count
     end
 
     def limit_query
